@@ -56,11 +56,15 @@ export async function POST(req: NextRequest) {
       structuredData,
       torahSource: torahSource
         ? {
-            ref: torahSource.ref,
-            baseText: torahSource.baseText,
-            chainSummary: torahSource.chainSummary,
+            baseRef: torahSource.baseRef,
             baseSignal: torahSource.baseSignal,
-            commentators: torahSource.commentators,
+            chainSummary: torahSource.chainSummary,
+            commentaryChain: torahSource.commentaryChain.map((c) => ({
+              commentator: c.commentator,
+              era: c.era,
+              ref: c.ref,
+            })),
+            query: torahSource.query,
           }
         : null,
     }, { status: 200 })
