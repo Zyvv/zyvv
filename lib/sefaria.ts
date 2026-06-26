@@ -246,35 +246,15 @@ Situation: "Should I move to another country for work" → exile and uprooting`,
       ),
     ].join('\n\n')
 
-    const [chainSummary, baseSignal] = await Promise.all([
-      groqFast(
-        `Compress this chain of Jewish text and commentary into ONE short paragraph,
-maximum 60 words. Show how the interpretation moves from the base text through
-each commentator, naming each commentator explicitly in chronological order.
-Format as a chain: "Base text [point] -> [Commentator] [point] -> [Commentator] [point]".
-No hedging. No "according to". Just the chain. Output ONLY the paragraph.`,
-        chainInput,
-        120
-      ),
-      groqFast(
-        `Compress this Jewish text into ONE sentence, maximum 20 words.
-No hedging, no "this teaches", no source attribution. Just the point being made.
-Output ONLY the sentence.`,
-        `${hit.ref}: ${baseText}`,
-        40
-      ),
-    ])
-
-    if (!chainSummary || !baseSignal) return null
-
     return {
-      baseRef: hit.ref,
-      baseSignal: baseSignal.trim(),
-      commentaryChain,
-      chainSummary: chainSummary.trim(),
-      query: query.trim(),
-      raw: chainInput,
-    }
+  baseRef: hit.ref,
+  baseSignal: baseText.slice(0, 120).trim(),
+  commentaryChain,
+  chainSummary: '',
+  query: query.trim(),
+  raw: chainInput,
+}
+
   } catch (err) {
     // Always fail silently — never block door generation
     console.error('[sefaria] Silent failure:', err)
