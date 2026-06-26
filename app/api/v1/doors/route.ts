@@ -8,7 +8,7 @@ import { saveSituation, saveDoors } from '@/lib/supabase'
 import { authenticateRequest, logRequest } from '@/lib/apiAuth'
 import { extractSefariaSource } from '@/lib/sefaria'
 
-export const runtime = 'edge'
+
 
 export async function POST(req: NextRequest) {
   const auth = await authenticateRequest(req)
