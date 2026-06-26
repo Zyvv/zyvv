@@ -1,11 +1,12 @@
 // ============================================================
-// ZYVV API v1 — Generate Doors
+// ZYVV API v1 -- Generate Doors
 // File: app/api/v1/doors/route.ts
 // ============================================================
 import { NextRequest, NextResponse } from 'next/server'
 import { generateDoors } from '@/lib/groq'
 import { saveSituation, saveDoors } from '@/lib/supabase'
 import { authenticateRequest, logRequest } from '@/lib/apiAuth'
+import { extractSefariaSource } from '@/lib/sefaria'
 
 export const runtime = 'edge'
 
@@ -23,13 +24,18 @@ export async function POST(req: NextRequest) {
     }
     if (trimmed.length < 10) {
       await logRequest(auth.apiKeyId!, '/api/v1/doors', 400)
-      return NextResponse.json({ error: 'situation too short — minimum 10 characters' }, { status: 400 })
+      return NextResponse.json({ error: 'situation too short -- minimum 10 characters' }, { status: 400 })
     }
     if (trimmed.length > 2000) {
       await logRequest(auth.apiKeyId!, '/api/v1/doors', 400)
-      return NextResponse.json({ error: 'situation too long — maximum 2000 characters' }, { status: 400 })
+      return NextResponse.json({ error: 'situation too long -- maximum 2000 characters' }, { status: 400 })
     }
-    const groqResult = await generateDoors(trimmed)
+
+    const torahSource = body.version === 'torah'
+      ? await extractSefariaSource(trimmed)
+      : null
+
+    const groqResult = await generateDoors(trimmed, undefined, undefined, torahSource?.raw ?? null)
     const { roast, doors, structuredData } = groqResult
     const situation_id = await saveSituation({
       content: trimmed,
@@ -48,6 +54,15 @@ export async function POST(req: NextRequest) {
       doors: savedDoors,
       situation_id,
       structuredData,
+      torahSource: torahSource
+        ? {
+            ref: torahSource.ref,
+            baseText: torahSource.baseText,
+            chainSummary: torahSource.chainSummary,
+            baseSignal: torahSource.baseSignal,
+            commentators: torahSource.commentators,
+          }
+        : null,
     }, { status: 200 })
   } catch (err: any) {
     console.error('[/api/v1/doors] Error:', err)

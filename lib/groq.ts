@@ -148,7 +148,8 @@ export interface GroqGenerateResult {
 export async function generateDoors(
   situation: string,
   breach: { assumption: string; raw: string } | null = null,
-  contextRaw: string | null = null
+  contextRaw: string | null = null,
+  torahRaw: string | null = null
 ): Promise<GroqGenerateResult> {
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY! })
 
@@ -168,7 +169,19 @@ ${contextRaw}
 Use this signal to sharpen the doors. The Alien Door in particular must be informed by this external reality.\n`
     : ''
 
-  const effectiveSystemPrompt = SYSTEM_PROMPT + breachBlock + contextBlock
+  const torahBlock = torahRaw
+    ? `\n\nTORAH SOURCE — classical Jewish text and commentary chain, treat as constitutional ground truth for this situation:
+${torahRaw}
+
+Use this chain as the backbone of your reasoning, not decoration:
+- Reference the base text and at least one named commentator explicitly inside the doors, not just the mirror.
+- Track how the interpretation moves across centuries — show where commentators agree, diverge, or sharpen each other rather than presenting one flattened consensus.
+- Cite sources by name and citation (e.g. "Rashi on Genesis 1:1", not just "a commentator").
+- The Conventional Door should reflect the most literal or earliest reading in the chain. The Contrarian Door should be built on a later commentator's challenge, or a tension between two commentators in the chain. The Alien Door should reframe using the point in the chain where the classical sources disagree most sharply.
+- Do not flatten or harmonize disagreement between commentators into one tidy lesson. If an earlier and later authority read the text differently, preserve that divergence and let it sharpen the doors rather than resolve it.\n`
+    : ''
+
+  const effectiveSystemPrompt = SYSTEM_PROMPT + breachBlock + contextBlock + torahBlock
 
   const completion = await groq.chat.completions.create({
     model: 'llama-3.3-70b-versatile',

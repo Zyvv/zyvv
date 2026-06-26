@@ -4,6 +4,8 @@
 // Enhanced with Data Moat structures
 // ============================================================
 
+
+
 // ── Door Types ───────────────────────────────────────────────
 
 export type DoorType = 'conventional' | 'contrarian' | 'alien'
@@ -182,7 +184,7 @@ export interface ContextSignalDisplay {
   query: string
 }
 
-export type ZyvvVersion = 'mana' | 'yuga'
+export type ZyvvVersion = 'mana' | 'yuga' | 'torah'
 
 export interface GenerateResponse {
   roast: string
@@ -191,4 +193,20 @@ export interface GenerateResponse {
   structuredData?: StructuredData
   breach: AssumptionBreachDisplay | null        // MANA
   contextSignal: ContextSignalDisplay | null    // YUGA
+  torahSource: SefariaSourceDisplay | null      // TORAH
+}
+
+// ── TORAH: Sefaria Source ─────────────────────────────────────
+export interface SefariaCommentaryDisplay {
+  commentator: string
+  era: string
+  ref: string
+}
+
+export interface SefariaSourceDisplay {
+  baseRef: string
+  baseSignal: string
+  chainSummary: string
+  commentaryChain: SefariaCommentaryDisplay[]
+  query: string
 }
