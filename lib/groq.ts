@@ -170,16 +170,28 @@ Use this signal to sharpen the doors. The Alien Door in particular must be infor
     : ''
 
   const torahBlock = torahRaw
-    ? `\n\nTORAH SOURCE — classical Jewish text and commentary chain, treat as constitutional ground truth for this situation:
+  ? `\n\nOVERRIDE — TORAH MODE ACTIVE. The following supersedes the door structure defined above.
+
+The three doors are NOT generic paths. They are built entirely from the classical chain below. Do not generate conventional career or life advice. Every door must be derived from a specific named source in this chain.
+
+CLASSICAL CHAIN:
 ${torahRaw}
 
-Use this chain as the backbone of your reasoning, not decoration:
-- Reference the base text and at least one named commentator explicitly inside the doors, not just the mirror.
-- Track how the interpretation moves across centuries — show where commentators agree, diverge, or sharpen each other rather than presenting one flattened consensus.
-- Cite sources by name and citation (e.g. "Rashi on Genesis 1:1", not just "a commentator").
-- The Conventional Door should reflect the most literal or earliest reading in the chain. The Contrarian Door should be built on a later commentator's challenge, or a tension between two commentators in the chain. The Alien Door should reframe using the point in the chain where the classical sources disagree most sharply.
-- Do not flatten or harmonize disagreement between commentators into one tidy lesson. If an earlier and later authority read the text differently, preserve that divergence and let it sharpen the doors rather than resolve it.\n`
-    : ''
+MANDATORY DOOR STRUCTURE — no deviation:
+
+DOOR 1 (CONVENTIONAL): Built from the earliest or most literal reading in the chain. Name the source explicitly (e.g. "Rashi on X reads this as..."). Show how the user's situation maps onto what that source says. The door action follows from that reading directly.
+
+DOOR 2 (CONTRARIAN): Built from a later commentator's challenge to the earlier reading, OR from a direct tension between two named commentators. Name both sides. The door action follows from the point of disagreement, not a resolution of it.
+
+DOOR 3 (ALIEN): Built from the sharpest divergence in the chain — the moment where the sources disagree most fundamentally about what the text means at all. Name that disagreement explicitly. The door reframes the user's situation using that divergence as its premise. This door should make the user feel like they were asking the wrong question.
+
+FORBIDDEN in torah mode:
+- Any door that does not name at least one specific commentator by name
+- Any door whose action could have been generated without the chain
+- Harmonizing or averaging the commentators into one lesson
+- Generic advice that could appear in a non-torah response
+- Phrases like "Jewish tradition teaches" or "the Torah says" as vague attribution — name the specific source\n`
+  : ''
 
   const effectiveSystemPrompt = SYSTEM_PROMPT + breachBlock + contextBlock + torahBlock
 
